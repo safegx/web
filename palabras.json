@@ -235,10 +235,10 @@
     "jp": "本 (ほん)"
   },
   {
-    "es": "Comida",
-    "en": "Food",
-    "jp": "食べ物 (たべもの)"
-  },
+  "es": "voleibol",
+  "en": "volleyball",
+  "jp": "バレーボール"
+},
   {
     "es": "Lento",
     "en": "Slow",
@@ -385,10 +385,10 @@
     "jp": "花 (はな)"
   },
   {
-    "es": "Puerta",
-    "en": "Door",
-    "jp": "ドア"
-  },
+  "es": "submarino",
+  "en": "submarine",
+  "jp": "潜水艦 (せんすいかん)"
+},
   {
     "es": "Playa",
     "en": "Beach",
@@ -420,10 +420,10 @@
   "jp": "どういたしまして"
 },
   {
-    "es": "Feliz",
-    "en": "Happy",
-    "jp": "幸せ (しあわせ)"
-  },
+  "es": "música",
+  "en": "music",
+  "jp": "音楽 (おんがく)"
+},
   {
     "es": "Hombre",
     "en": "Man",
@@ -474,11 +474,11 @@
     "en": "Time",
     "jp": "時間 (じかん)"
   },
-  {
-    "es": "Puerta",
-    "en": "Door",
-    "jp": "ドア"
-  },
+ {
+  "es": "avión",
+  "en": "airplane",
+  "jp": "飛行機 (ひこうき)"
+},
   {
     "es": "Azul",
     "en": "Blue",
@@ -590,10 +590,10 @@
     "jp": "空 (そら)"
   },
   {
-    "es": "Verde",
-    "en": "Green",
-    "jp": "緑 (みどり)"
-  },
+  "es": "lindo/a",
+  "en": "cute",
+  "jp": "かわいい"
+},
   {
     "es": "Casa",
     "en": "House",
@@ -670,10 +670,10 @@
     "jp": "パン"
   },
   {
-    "es": "Verde",
-    "en": "Green",
-    "jp": "緑 (みどり)"
-  },
+  "es": "baloncesto",
+  "en": "basketball",
+  "jp": "バスケットボール"
+},
   {
     "es": "Montaña",
     "en": "Mountain",
@@ -690,10 +690,10 @@
     "jp": "果物 (くだもの)"
   },
   {
-    "es": "Azul",
-    "en": "Blue",
-    "jp": "青 (あお)"
-  },
+  "es": "caballo",
+  "en": "horse",
+  "jp": "馬 (うま)"
+},
   {
     "es": "Maestro",
     "en": "Teacher",
@@ -705,10 +705,10 @@
     "jp": "男性 (だんせい)"
   },
   {
-    "es": "Flor",
-    "en": "Flower",
-    "jp": "花 (はな)"
-  },
+  "es": "arcoiris",
+  "en": "rainbow",
+  "jp": "虹 (にじ)"
+},
   {
     "es": "Comida",
     "en": "Food",
@@ -790,10 +790,10 @@
     "jp": "車 (くるま)"
   },
   {
-    "es": "Verde",
-    "en": "Green",
-    "jp": "緑 (みどり)"
-  },
+  "es": "fútbol",
+  "en": "football",
+  "jp": "サッカー"
+},
   {
     "es": "Río",
     "en": "River",
@@ -835,10 +835,10 @@
     "jp": "本 (ほん)"
   },
   {
-    "es": "Azul",
-    "en": "Blue",
-    "jp": "青 (あお)"
-  },
+  "es": "guapo/a",
+  "en": "handsome/beautiful",
+  "jp": "かっこいい / きれい"
+},
   {
     "es": "Amor",
     "en": "Love",
@@ -880,10 +880,10 @@
     "jp": "犬 (いぬ)"
   },
   {
-    "es": "Flor",
-    "en": "Flower",
-    "jp": "花 (はな)"
-  },
+  "es": "barco",
+  "en": "boat",
+  "jp": "船 (ふね)"
+},
   {
     "es": "Triste",
     "en": "Sad",
@@ -915,10 +915,10 @@
     "jp": "幸せ (しあわせ)"
   },
   {
-    "es": "Flor",
-    "en": "Flower",
-    "jp": "花 (はな)"
-  },
+  "es": "dinero",
+  "en": "money",
+  "jp": "お金 (おかね)"
+},
   {
     "es": "Pájaro",
     "en": "Bird",
