@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Panel de dibujo</title>
+  <title>Drawing</title>
   <style>
     body {
       margin: 0;
@@ -149,33 +149,33 @@
 </head>
 <body>
 
-  <nav>
-    <a href="reseñas.html">Reseñas y Sugerencias</a>
-    <a href="carta.html">Carta para mi amor</a>
-    <a href="tiempo.html">Tiempo juntos</a>
-    <a href="dibujo.html" class="active">Panel de dibujo</a>
-    <a href="palabra.html">Palabra española aleatoria</a>
+ <nav>
+    <a href="reseñas.html" >Review and suggestions</a>
+    <a href="carta.html">Letter for my princess</a>
+    <a href="tiempo.html">time together</a>
+    <a href="dibujo.html"class="active">Drawings</a>
+    <a href="palabra.html">Random spanish word</a>
   </nav>
 
   <div class="spacer"></div>
 
   <div class="container" role="main">
     <div class="toolbar" role="toolbar" aria-label="Herramientas de dibujo">
-      <button class="brush-btn active" data-size="2" data-type="round" title="Pincel pequeño">✏️</button>
-      <button class="brush-btn" data-size="5" data-type="round" title="Pincel mediano">🖌️</button>
-      <button class="brush-btn" data-size="10" data-type="round" title="Pincel grande">🖍️</button>
-      <button class="brush-btn" data-size="8" data-type="square" title="Pincel cuadrado">⬛</button>
-      <button class="brush-btn" id="eraser" title="Borrador">🧽</button>
+      <button class="brush-btn active" data-size="2" data-type="round" title="Small brush">✏️</button>
+      <button class="brush-btn" data-size="5" data-type="round" title="Medium brush">🖌️</button>
+      <button class="brush-btn" data-size="10" data-type="round" title="Large brush">🖍️</button>
+      <button class="brush-btn" data-size="8" data-type="square" title="Square brush">⬛</button>
+      <button class="brush-btn" id="eraser" title="Eraser">🧽</button>
 
-      <div class="color-picker" title="Selecciona color">
+      <div class="color-picker" title="Pick a color">
         <div class="color-display" id="colorDisplay"></div>
-        <input type="color" id="colorPicker" value="#8b5e27" aria-label="Selector de color">
+        <input type="color" id="colorPicker" value="#8b5e27" aria-label="Color picker">
       </div>
 
-      <button class="brush-btn" id="undoBtn" title="Deshacer (Ctrl + Z)">↩️</button>
+      <button class="brush-btn" id="undoBtn" title="Undo (Ctrl + Z)">↩️</button>
     </div>
 
-    <canvas id="drawingCanvas" aria-label="Área de dibujo"></canvas>
+    <canvas id="drawingCanvas" aria-label="Drawing area"></canvas>
   </div>
 
   <script>
