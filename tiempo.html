@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tiempo juntos - Cuenta desde 11 de marzo 2025</title>
+  <title>Time Together - Counts from March 11 2025</title>
   <style>
     body {
       margin: 0;
@@ -92,11 +92,11 @@
 <body>
 
   <nav>
-    <a href="reseñas.html">Reseñas y Sugerencias</a>
-    <a href="carta.html">Carta para mi amor</a>
-    <a href="tiempo.html" class="active">Tiempo juntos</a>
-    <a href="dibujo.html">Panel de dibujo</a>
-    <a href="palabra.html">Palabra española aleatoria</a>
+    <a href="reseñas.html">Review and suggestions</a>
+    <a href="carta.html">Letter for my princess</a>
+    <a href="tiempo.html" class="active">Time together</a>
+    <a href="dibujo.html">Drawing</a>
+    <a href="palabra.html">Random spanish word</a>
   </nav>
 
   <div class="spacer"></div>
@@ -151,15 +151,15 @@
       days = days % 7;
 
       document.getElementById('line1').textContent =
-        `${years} año${years !== 1 ? 's' : ''} ` +
-        `${months} mes${months !== 1 ? 'es' : ''} ` +
-        `${weeks} semana${weeks !== 1 ? 's' : ''} ` +
-        `${days} día${days !== 1 ? 's' : ''}`;
+        `${years} year${years !== 1 ? 's' : ''} ` +
+        `${months} month${months !== 1 ? 's' : ''} ` +
+        `${weeks} week${weeks !== 1 ? 's' : ''} ` +
+        `${days} day${days !== 1 ? 's' : ''}`;
 
       document.getElementById('line2').textContent =
-        `${hours.toString().padStart(2,'0')} hora${hours !== 1 ? 's' : ''} ` +
-        `${minutes.toString().padStart(2,'0')} minuto${minutes !== 1 ? 's' : ''} ` +
-        `${seconds.toString().padStart(2,'0')} segundo${seconds !== 1 ? 's' : ''}`;
+        `${hours.toString().padStart(2,'0')} hour${hours !== 1 ? 's' : ''} ` +
+        `${minutes.toString().padStart(2,'0')} minute${minutes !== 1 ? 's' : ''} ` +
+        `${seconds.toString().padStart(2,'0')} second${seconds !== 1 ? 's' : ''}`;
     }
 
     setInterval(updateTime, 1000);
