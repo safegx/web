@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel de dibujo</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #ECE4D9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #5d4a3e;
+      background: linear-gradient(135deg, #f8f3ec 0%, #eae1d9 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #d8c4b0;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem 1rem;
+      z-index: 1000;
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: 0.03em;
+    }
+
+    nav a {
+      color: #5d4a3e;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 10px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    nav a:hover {
+      background-color: #e0d2c0;
+      color: #4a3a2c;
+    }
+
+    nav a.active {
+      background-color: #8b5e27;
+      color: #f0e7d8;
+      box-shadow: 0 0 8px #a67e43cc;
+    }
+
+    .spacer {
+      height: 60px; /* espacio para que nav no tape contenido */
+      flex-shrink: 0;
+      width: 100%;
+    }
+
+    .container {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 900px;
+      padding: 10px 1rem 20px;
+      box-sizing: border-box;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .brush-btn {
+      background-color: #d8c4b0;
+      border: none;
+      padding: 10px;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+    }
+
+    .brush-btn.active,
+    .brush-btn:hover {
+      background-color: #8b5e27;
+      color: #fffaf2;
+    }
+
+    .color-picker {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background-color: #f5efe6;
+      border: 2px solid #bfa78f;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      user-select: none;
+    }
+
+    .color-display {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 2px solid #8b5e27;
+    }
+
+    #colorPicker {
+      -webkit-appearance: none;
+      border: none;
+      width: 30px;
+      height: 30px;
+      background: none;
+      cursor: pointer;
+    }
+
+    #colorPicker::-webkit-color-swatch {
+      border-radius: 6px;
+      border: none;
+    }
+
+    #colorPicker::-moz-color-swatch {
+      border-radius: 6px;
+      border: none;
+    }
+
+    canvas {
+      border: 2px solid #bfa78f;
+      border-radius: 12px;
+      background-color: #fffaf2;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      display: block;
+      touch-action: none;
+      /* Tamaño ajustado por JS para que se vea entero y centrado */
+      max-width: 100%;
+      max-height: 70vh;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="reseñas.html">Reseñas y Sugerencias</a>
+    <a href="carta.html">Carta para mi amor</a>
+    <a href="tiempo.html">Tiempo juntos</a>
+    <a href="dibujo.html" class="active">Panel de dibujo</a>
+    <a href="palabra.html">Palabra española aleatoria</a>
+  </nav>
+
+  <div class="spacer"></div>
+
+  <div class="container" role="main">
+    <div class="toolbar" role="toolbar" aria-label="Herramientas de dibujo">
+      <button class="brush-btn active" data-size="2" data-type="round" title="Pincel pequeño">✏️</button>
+      <button class="brush-btn" data-size="5" data-type="round" title="Pincel mediano">🖌️</button>
+      <button class="brush-btn" data-size="10" data-type="round" title="Pincel grande">🖍️</button>
+      <button class="brush-btn" data-size="8" data-type="square" title="Pincel cuadrado">⬛</button>
+      <button class="brush-btn" id="eraser" title="Borrador">🧽</button>
+
+      <div class="color-picker" title="Selecciona color">
+        <div class="color-display" id="colorDisplay"></div>
+        <input type="color" id="colorPicker" value="#8b5e27" aria-label="Selector de color">
+      </div>
+
+      <button class="brush-btn" id="undoBtn" title="Deshacer (Ctrl + Z)">↩️</button>
+    </div>
+
+    <canvas id="drawingCanvas" aria-label="Área de dibujo"></canvas>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('drawingCanvas');
+    const ctx = canvas.getContext('2d');
+    const colorPicker = document.getElementById('colorPicker');
+    const colorDisplay = document.getElementById('colorDisplay');
+    const brushButtons = document.querySelectorAll('.brush-btn');
+    const eraserBtn = document.getElementById('eraser');
+    const undoBtn = document.getElementById('undoBtn');
+
+    let drawing = false;
+    let lastX = 0, lastY = 0;
+    let brushSize = 2;
+    let brushType = 'round';
+    let isErasing = false;
+    let savedColor = colorPicker.value;
+    const history = [];
+
+    function setCanvasSize() {
+      const container = document.querySelector('.container');
+      const toolbar = document.querySelector('.toolbar');
+      const containerStyles = getComputedStyle(container);
+      const toolbarStyles = getComputedStyle(toolbar);
+
+      // Definir máximo tamaño para canvas para que se vea entero en pantalla
+      const maxWidth = Math.min(window.innerWidth * 0.95, 900);
+      const maxHeight = window.innerHeight - toolbar.offsetHeight - 100; // espacio para toolbar y algo de margen
+
+      // Para que el canvas tenga un tamaño proporcionado, aquí fijo relación 4:3 (ancho:alto)
+      let canvasWidth = maxWidth;
+      let canvasHeight = canvasWidth * 3 / 4;
+
+      if (canvasHeight > maxHeight) {
+        canvasHeight = maxHeight;
+        canvasWidth = canvasHeight * 4 / 3;
+      }
+
+      const scale = window.devicePixelRatio || 1;
+      canvas.width = canvasWidth * scale;
+      canvas.height = canvasHeight * scale;
+      canvas.style.width = canvasWidth + 'px';
+      canvas.style.height = canvasHeight + 'px';
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0); // resetear transform
+      ctx.scale(scale, scale);
+
+      ctx.lineCap = brushType;
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = brushSize;
+      ctx.strokeStyle = isErasing ? '#fffaf2' : savedColor;
+
+      // Restaurar dibujo previo si hay historial
+      if(history.length){
+        const img = new Image();
+        img.src = history[history.length - 1];
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width / scale, canvas.height / scale);
+        }
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    setCanvasSize();
+
+    window.addEventListener('resize', () => {
+      setCanvasSize();
+    });
+
+    function startDrawing(e) {
+      drawing = true;
+      const rect = canvas.getBoundingClientRect();
+      lastX = (e.clientX || e.touches[0].clientX) - rect.left;
+      lastY = (e.clientY || e.touches[0].clientY) - rect.top;
+    }
+
+    function draw(e) {
+      if (!drawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX || e.touches[0].clientX) - rect.left;
+      const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+      ctx.lineCap = brushType;
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = brushSize;
+      ctx.strokeStyle = isErasing ? '#fffaf2' : savedColor;
+
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+
+      lastX = x;
+      lastY = y;
+    }
+
+    function stopDrawing() {
+      if (!drawing) return;
+      drawing = false;
+      saveHistory();
+    }
+
+    function saveHistory() {
+      // Guardar imagen actual en historial para undo
+      const dataUrl = canvas.toDataURL();
+      history.push(dataUrl);
+      if(history.length > 50) history.shift(); // Limitar historial
+    }
+
+    brushButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(btn.id === 'eraser'){
+          isErasing = true;
+          savedColor = colorPicker.value;
+          brushType = 'round';
+          brushSize = 20;
+          updateActiveButton(btn);
+        } else if(btn.id === 'undoBtn'){
+          undo();
+        } else {
+          isErasing = false;
+          brushSize = parseInt(btn.getAttribute('data-size'));
+          brushType = btn.getAttribute('data-type');
+          updateActiveButton(btn);
+        }
+        updateContext();
+      });
+    });
+
+    colorPicker.addEventListener('input', () => {
+      savedColor = colorPicker.value;
+      colorDisplay.style.backgroundColor = savedColor;
+      if(!isErasing){
+        ctx.strokeStyle = savedColor;
+      }
+    });
+
+    undoBtn.addEventListener('click', () => {
+      undo();
+    });
+
+    function updateActiveButton(activeBtn) {
+      brushButtons.forEach(btn => btn.classList.remove('active'));
+      if(activeBtn) activeBtn.classList.add('active');
+    }
+
+    function updateContext() {
+      ctx.lineWidth = brushSize;
+      ctx.lineCap = brushType;
+      ctx.strokeStyle = isErasing ? '#fffaf2' : savedColor;
+    }
+
+    function undo() {
+      if(history.length < 2) return; // nada que deshacer
+      history.pop(); // quitar estado actual
+      const lastState = history[history.length - 1];
+      const img = new Image();
+      img.src = lastState;
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
+      };
+    }
+
+    // Inicializar color display
+    colorDisplay.style.backgroundColor = savedColor;
+
+    // Eventos para dibujar
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('touchstart', startDrawing);
+
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('touchmove', draw);
+
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+    canvas.addEventListener('touchend', stopDrawing);
+    canvas.addEventListener('touchcancel', stopDrawing);
+
+    // Guardar estado inicial vacío
+    saveHistory();
+
+    // Atajo para deshacer con Ctrl+Z
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        undo();
+      }
+    });
+  </script>
+
+</body>
+</html>
