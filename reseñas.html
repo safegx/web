@@ -186,8 +186,8 @@
   <nav>
     <a href="reseñas.html" class="active">Review and suggestions</a>
     <a href="carta.html">Letter for my princess</a>
-    <a href="tiempo.html">time together</a>
-    <a href="dibujo.html">Drawings</a>
+    <a href="tiempo.html">Time together</a>
+    <a href="dibujo.html">Drawing</a>
     <a href="palabra.html">Random spanish word</a>
   </nav>
 
@@ -198,7 +198,7 @@
     <!-- Sección de opiniones -->
     <h1>Rate your boyfriend</h1>
     <div id="average">0.0</div>
-    <div id="total">0 reseñas</div>
+    <div id="total">0 reviews</div>
 
     <div class="stars" id="stars">
       <div class="star" data-value="1">⭐</div>
@@ -208,7 +208,7 @@
       <div class="star" data-value="5">⭐</div>
     </div>
 
-    <textarea id="comment" placeholder="Deja tu comentario aquí..."></textarea>
+    <textarea id="comment" placeholder="Leave your comment here..."></textarea>
     <button id="submit-btn">Send review</button>
     <div id="message-box"></div>
 
@@ -279,7 +279,7 @@
     async function submitReview() {
       const comment = commentInput.value.trim();
       if (selectedRating === 0 || comment === "") {
-        showMessage("Por favor selecciona una calificación y escribe un comentario 💬", "error");
+        showMessage("Please select a rating and write a comment. 💬", "error");
         return;
       }
 
@@ -324,7 +324,7 @@
 
       const avg = count ? (total / count).toFixed(1) : 0;
       averageDisplay.textContent = avg;
-      totalDisplay.textContent = count + (count === 1 ? " reseña" : " reseñas");
+      totalDisplay.textContent = count + (count === 1 ? " review" : " reviews");
     }
 
     window.onload = loadReviews;
