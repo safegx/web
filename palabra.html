@@ -231,7 +231,7 @@
     <a href="carta.html">Letter for my princess</a>
     <a href="tiempo.html">time together</a>
     <a href="dibujo.html">Drawings</a>
-    <a href="palabra.html"class="active">Random spanish word</a>
+    <a href="palabra.html" class="active">Random spanish word</a>
   </nav>
 
 <div class="spacer"></div>
@@ -265,12 +265,12 @@
 
   async function loadWords() {
     try {
-      const response = await fetch('palabras/palabras.json');
+      const response = await fetch('palabras.json');  // Aquí el cambio: archivo JSON en misma carpeta
       if (!response.ok) throw new Error('No se pudo cargar el archivo JSON.');
       words = await response.json();
     } catch (error) {
       console.error('Error al cargar las palabras:', error);
-      alert('Error al cargar las palabras. Verifica que el archivo "palabras.json" está en la carpeta correcta.');
+      alert('Error al cargar las palabras. Verifica que el archivo "palabras.json" está en la misma carpeta que este HTML.');
     }
   }
 
