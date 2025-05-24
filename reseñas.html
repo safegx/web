@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Opiniones Cozy</title>
+  <title>Reviews</title>
   <style>
     /* Body y fondo con gradiente */
     body {
@@ -184,11 +184,11 @@
 <body>
 
   <nav>
-    <a href="reseñas.html" class="active">Reseña y sugerencias</a>
-    <a href="carta.html">Carta para mi amor</a>
-    <a href="tiempo.html">Tiempo juntos</a>
-    <a href="dibujo.html">Panel de dibujo</a>
-    <a href="palabra.html">Palabra española aleatoria</a>
+    <a href="reseñas.html" class="active">Review and suggestions</a>
+    <a href="carta.html">Letter for my princess</a>
+    <a href="tiempo.html">time together</a>
+    <a href="dibujo.html">Drawings</a>
+    <a href="palabra.html">Random spanish word</a>
   </nav>
 
   <div class="spacer"></div>
@@ -196,7 +196,7 @@
   <div class="container">
 
     <!-- Sección de opiniones -->
-    <h1>Califica esta página</h1>
+    <h1>Rate your boyfriend</h1>
     <div id="average">0.0</div>
     <div id="total">0 reseñas</div>
 
@@ -209,10 +209,10 @@
     </div>
 
     <textarea id="comment" placeholder="Deja tu comentario aquí..."></textarea>
-    <button id="submit-btn">Enviar opinión</button>
+    <button id="submit-btn">Send review</button>
     <div id="message-box"></div>
 
-    <div id="review-log"><h2>Comentarios 💬</h2></div>
+    <div id="review-log"><h2>Comments 💬</h2></div>
   </div>
 
   <script type="module">
@@ -289,13 +289,13 @@
           comment: comment,
           timestamp: serverTimestamp()
         });
-        showMessage("Opinión enviada con éxito 💖", "success");
+        showMessage("Review sent successfully 💖", "success");
         commentInput.value = "";
         selectedRating = 0;
         highlightStars(0);
         loadReviews();
       } catch (error) {
-        showMessage("Error al enviar la opinión: " + error.message, "error");
+        showMessage("Error submitting review: " + error.message, "error");
       }
     }
 
@@ -303,7 +303,7 @@
       const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
       const snapshot = await getDocs(q);
 
-      reviewLog.innerHTML = "<h2>Comentarios 💬</h2>";
+      reviewLog.innerHTML = "<h2>Comments 💬</h2>";
 
       let total = 0;
       let count = 0;
