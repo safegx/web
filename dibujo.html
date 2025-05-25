@@ -153,7 +153,7 @@
     <a href="reseñas.html" >Review & suggestions</a>
     <a href="carta.html">Letter for my princess</a>
     <a href="tiempo.html">Time together</a>
-    <a href="dibujo.html"class="active">Drawing</a>
+    <a href="dibujo.html" class="active">Drawing</a>
     <a href="palabra.html">Spanish words</a>
   </nav>
 
@@ -198,14 +198,10 @@
     function setCanvasSize() {
       const container = document.querySelector('.container');
       const toolbar = document.querySelector('.toolbar');
-      const containerStyles = getComputedStyle(container);
-      const toolbarStyles = getComputedStyle(toolbar);
 
-      // Definir máximo tamaño para canvas para que se vea entero en pantalla
       const maxWidth = Math.min(window.innerWidth * 0.95, 900);
-      const maxHeight = window.innerHeight - toolbar.offsetHeight - 100; // espacio para toolbar y algo de margen
+      const maxHeight = window.innerHeight - toolbar.offsetHeight - 100;
 
-      // Para que el canvas tenga un tamaño proporcionado, aquí fijo relación 4:3 (ancho:alto)
       let canvasWidth = maxWidth;
       let canvasHeight = canvasWidth * 3 / 4;
 
@@ -220,7 +216,7 @@
       canvas.style.width = canvasWidth + 'px';
       canvas.style.height = canvasHeight + 'px';
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0); // resetear transform
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(scale, scale);
 
       ctx.lineCap = brushType;
@@ -228,7 +224,6 @@
       ctx.lineWidth = brushSize;
       ctx.strokeStyle = isErasing ? '#fffaf2' : savedColor;
 
-      // Restaurar dibujo previo si hay historial
       if(history.length){
         const img = new Image();
         img.src = history[history.length - 1];
@@ -247,18 +242,39 @@
       setCanvasSize();
     });
 
-    function startDrawing(e) {
-      drawing = true;
+    // Función para obtener la posición correcta del puntero respecto al canvas, considerando escala
+    function getPointerPos(e) {
       const rect = canvas.getBoundingClientRect();
-      lastX = (e.clientX || e.touches[0].clientX) - rect.left;
-      lastY = (e.clientY || e.touches[0].clientY) - rect.top;
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      let clientX, clientY;
+      if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    function startDrawing(e) {
+      e.preventDefault();
+      drawing = true;
+      const pos = getPointerPos(e);
+      lastX = pos.x;
+      lastY = pos.y;
     }
 
     function draw(e) {
       if (!drawing) return;
-      const rect = canvas.getBoundingClientRect();
-      const x = (e.clientX || e.touches[0].clientX) - rect.left;
-      const y = (e.clientY || e.touches[0].clientY) - rect.top;
+      e.preventDefault();
+      const pos = getPointerPos(e);
 
       ctx.lineCap = brushType;
       ctx.lineJoin = 'round';
@@ -267,11 +283,11 @@
 
       ctx.beginPath();
       ctx.moveTo(lastX, lastY);
-      ctx.lineTo(x, y);
+      ctx.lineTo(pos.x, pos.y);
       ctx.stroke();
 
-      lastX = x;
-      lastY = y;
+      lastX = pos.x;
+      lastY = pos.y;
     }
 
     function stopDrawing() {
@@ -281,10 +297,9 @@
     }
 
     function saveHistory() {
-      // Guardar imagen actual en historial para undo
       const dataUrl = canvas.toDataURL();
       history.push(dataUrl);
-      if(history.length > 50) history.shift(); // Limitar historial
+      if(history.length > 50) history.shift();
     }
 
     brushButtons.forEach(btn => {
@@ -331,8 +346,8 @@
     }
 
     function undo() {
-      if(history.length < 2) return; // nada que deshacer
-      history.pop(); // quitar estado actual
+      if(history.length < 2) return;
+      history.pop();
       const lastState = history[history.length - 1];
       const img = new Image();
       img.src = lastState;
@@ -342,10 +357,8 @@
       };
     }
 
-    // Inicializar color display
     colorDisplay.style.backgroundColor = savedColor;
 
-    // Eventos para dibujar
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('touchstart', startDrawing);
 
@@ -357,10 +370,8 @@
     canvas.addEventListener('touchend', stopDrawing);
     canvas.addEventListener('touchcancel', stopDrawing);
 
-    // Guardar estado inicial vacío
     saveHistory();
 
-    // Atajo para deshacer con Ctrl+Z
     window.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
         e.preventDefault();
