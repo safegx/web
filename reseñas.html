@@ -271,21 +271,19 @@
       messageBox.style.display = 'block';
       setTimeout(() => {
         messageBox.style.display = 'none';
-      }, 3000);
+      }, 4000);
     }
-
-    submitBtn.addEventListener('click', submitReview);
 
     async function submitReview() {
       const comment = commentInput.value.trim();
-      if (selectedRating === 0 || comment === "") {
-        showMessage("Please select a rating and write a comment. 💬", "error");
+      if (comment === "") {
+        showMessage("Please write a comment. 💬", "error");
         return;
       }
 
       try {
         await addDoc(collection(db, "reviews"), {
-          rating: selectedRating,
+          rating: selectedRating, // puede ser 0
           comment: comment,
           timestamp: serverTimestamp()
         });
@@ -316,7 +314,7 @@
         const reviewItem = document.createElement("div");
         reviewItem.className = "review-item";
         reviewItem.innerHTML = `
-          <div class="review-stars">⭐ ${data.rating} / 5</div>
+          <div class="review-stars">${data.rating > 0 ? '⭐ ' + data.rating + ' / 5' : '0 / 5'}</div>
           <div>${data.comment}</div>
         `;
         reviewLog.appendChild(reviewItem);
@@ -327,8 +325,10 @@
       totalDisplay.textContent = count + (count === 1 ? " review" : " reviews");
     }
 
-    window.onload = loadReviews;
+    submitBtn.addEventListener('click', submitReview);
 
+    // Carga inicial
+    loadReviews();
   </script>
 </body>
 </html>
