@@ -3,22 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Reviews</title>
+  <title>Rate your boyfriend</title>
   <style>
-    /* Body y fondo con gradiente */
     body {
       margin: 0;
       height: 100vh;
-      background-color: #ECE4D9;
+      background: linear-gradient(135deg, #f8f3ec 0%, #eae1d9 100%);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #5d4a3e;
-      background: linear-gradient(135deg, #f8f3ec 0%, #eae1d9 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    /* Barra de navegación fija con estilo Cozy */
     nav {
       position: fixed;
       top: 0;
@@ -28,11 +25,10 @@
       display: flex;
       justify-content: center;
       gap: 2rem;
-      padding: 1rem 1rem;
+      padding: 1rem;
       z-index: 1000;
       font-weight: 600;
       font-size: 1.1rem;
-      letter-spacing: 0.03em;
     }
 
     nav a {
@@ -40,12 +36,11 @@
       text-decoration: none;
       padding: 8px 14px;
       border-radius: 10px;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: background-color 0.3s ease;
     }
 
     nav a:hover {
       background-color: #e0d2c0;
-      color: #4a3a2c;
     }
 
     nav a.active {
@@ -54,26 +49,23 @@
       box-shadow: 0 0 8px #a67e43cc;
     }
 
-    /* Spacer para que el contenido no quede tapado por la nav */
     .spacer {
       height: 60px;
       flex-shrink: 0;
     }
 
-    /* Contenedor principal centrado vertical y horizontal */
     .container {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center; /* vertical center */
-      align-items: center;    /* horizontal center */
+      justify-content: center;
+      align-items: center;
       text-align: center;
       max-width: 700px;
       padding: 2rem 1rem;
       width: 100%;
     }
 
-    /* Estilos para la sección de opiniones */
     h1 {
       margin-bottom: 0.5rem;
     }
@@ -99,15 +91,15 @@
     }
 
     .star {
-      font-size: 2.5rem;
-      color: #b67c4a;
+      width: 50px;
+      height: 50px;
       transition: transform 0.3s ease;
       user-select: none;
+      filter: none;
     }
 
-    .star:hover, .star.hovered {
-      transform: scale(1.3);
-      color: #8b5e27;
+    .star.zoom {
+      animation: zoomInOut 0.5s ease-in-out;
     }
 
     #comment {
@@ -145,13 +137,11 @@
       border-radius: 10px;
       padding: 1rem 1.5rem;
       box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-      color: #5d4a3e;
     }
 
     .review-item {
       border-bottom: 1px solid #d4c9b4;
       padding: 0.5rem 0;
-      font-size: 0.9rem;
     }
 
     .review-stars {
@@ -179,6 +169,11 @@
       background-color: #8b5e27;
       color: #f0e7d8;
     }
+
+    @keyframes zoomInOut {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
   </style>
 </head>
 <body>
@@ -194,18 +189,17 @@
   <div class="spacer"></div>
 
   <div class="container">
-
-    <!-- Sección de opiniones -->
     <h1>Rate your boyfriend</h1>
     <div id="average">0.0</div>
     <div id="total">0 reviews</div>
 
     <div class="stars" id="stars">
-      <div class="star" data-value="1">⭐</div>
-      <div class="star" data-value="2">⭐</div>
-      <div class="star" data-value="3">⭐</div>
-      <div class="star" data-value="4">⭐</div>
-      <div class="star" data-value="5">⭐</div>
+      <!-- Aquí ya usamos el gif para que estén animadas desde el principio -->
+      <img class="star" data-value="1" src="star.gif" alt="Star 1" />
+      <img class="star" data-value="2" src="star.gif" alt="Star 2" />
+      <img class="star" data-value="3" src="star.gif" alt="Star 3" />
+      <img class="star" data-value="4" src="star.gif" alt="Star 4" />
+      <img class="star" data-value="5" src="star.gif" alt="Star 5" />
     </div>
 
     <textarea id="comment" placeholder="Leave your comment here..."></textarea>
@@ -219,21 +213,17 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-    // Config Firebase
-    const firebaseConfig = {
+    const app = initializeApp({
       apiKey: "AIzaSyCSSp9nv6zYGWCnL2pnhfT2I7SWv3lYQ4o",
       authDomain: "project-9bd6f.firebaseapp.com",
       projectId: "project-9bd6f",
       storageBucket: "project-9bd6f.appspot.com",
       messagingSenderId: "384848962174",
-      appId: "1:384848962174:web:8e9414fb1abc9b83222e2f",
-      measurementId: "G-0GRDBWGYSM"
-    };
+      appId: "1:384848962174:web:8e9414fb1abc9b83222e2f"
+    });
 
-    const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Variables para valoración
     let selectedRating = 0;
     const stars = document.querySelectorAll('.star');
     const averageDisplay = document.getElementById('average');
@@ -244,23 +234,27 @@
     const messageBox = document.getElementById('message-box');
 
     stars.forEach(star => {
-      star.addEventListener('mouseenter', () => {
-        const val = Number(star.getAttribute('data-value'));
-        highlightStars(val);
-      });
-      star.addEventListener('mouseleave', () => {
-        highlightStars(selectedRating);
-      });
       star.addEventListener('click', () => {
         selectedRating = Number(star.getAttribute('data-value'));
         highlightStars(selectedRating);
+
+        // Agregar clase zoom para animar
+        star.classList.add('zoom');
+        // Quitar la clase zoom después de la animación
+        setTimeout(() => {
+          star.classList.remove('zoom');
+        }, 500);
       });
     });
 
     function highlightStars(rating) {
       stars.forEach(star => {
         const val = Number(star.getAttribute('data-value'));
-        star.classList.toggle('hovered', val <= rating);
+        if (val <= rating) {
+          star.style.filter = "drop-shadow(0 0 4px gold)";
+        } else {
+          star.style.filter = "none";
+        }
       });
     }
 
@@ -274,60 +268,68 @@
       }, 4000);
     }
 
-    async function submitReview() {
+    submitBtn.addEventListener('click', async () => {
       const comment = commentInput.value.trim();
-      if (comment === "") {
-        showMessage("Please write a comment. 💬", "error");
+      if (!comment) {
+        showMessage("Please write a comment.", "error");
+        return;
+      }
+      if(selectedRating === 0){
+        showMessage("Please select a star rating.", "error");
         return;
       }
 
       try {
         await addDoc(collection(db, "reviews"), {
-          rating: selectedRating, // puede ser 0
-          comment: comment,
+          rating: selectedRating,
+          comment,
           timestamp: serverTimestamp()
         });
-        showMessage("Review sent successfully 💖", "success");
+        showMessage("Thank you for your review!", "success");
         commentInput.value = "";
         selectedRating = 0;
         highlightStars(0);
         loadReviews();
       } catch (error) {
-        showMessage("Error submitting review: " + error.message, "error");
+        showMessage("Failed to send review. Try again later.", "error");
+        console.error(error);
       }
-    }
+    });
 
     async function loadReviews() {
       const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
-      const snapshot = await getDocs(q);
+      const querySnapshot = await getDocs(q);
 
       reviewLog.innerHTML = "<h2>Comments 💬</h2>";
 
-      let total = 0;
+      let sum = 0;
       let count = 0;
 
-      snapshot.forEach(doc => {
+      querySnapshot.forEach(doc => {
         const data = doc.data();
-        total += data.rating;
         count++;
+        sum += data.rating;
 
-        const reviewItem = document.createElement("div");
-        reviewItem.className = "review-item";
-        reviewItem.innerHTML = `
-          <div class="review-stars">${data.rating > 0 ? '⭐ ' + data.rating + ' / 5' : '0 / 5'}</div>
-          <div>${data.comment}</div>
-        `;
-        reviewLog.appendChild(reviewItem);
+        const item = document.createElement('div');
+        item.classList.add('review-item');
+
+        const starsLine = document.createElement('div');
+        starsLine.classList.add('review-stars');
+        starsLine.textContent = "★".repeat(data.rating) + "☆".repeat(5 - data.rating);
+
+        const commentLine = document.createElement('p');
+        commentLine.textContent = data.comment;
+
+        item.appendChild(starsLine);
+        item.appendChild(commentLine);
+        reviewLog.appendChild(item);
       });
 
-      const avg = count ? (total / count).toFixed(1) : 0;
+      const avg = count ? (sum / count).toFixed(1) : "0.0";
       averageDisplay.textContent = avg;
-      totalDisplay.textContent = count + (count === 1 ? " review" : " reviews");
+      totalDisplay.textContent = `${count} review${count !== 1 ? 's' : ''}`;
     }
 
-    submitBtn.addEventListener('click', submitReview);
-
-    // Carga inicial
     loadReviews();
   </script>
 </body>
