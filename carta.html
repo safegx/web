@@ -94,6 +94,19 @@
       z-index: 2;
       font-size: 22px;
       color: #f0e7d8;
+      animation: swayPhysics 2.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+      transform-origin: center bottom;
+    }
+
+    @keyframes swayPhysics {
+      0%   { transform: rotate(-12deg); }
+      15%  { transform: rotate(10deg); }
+      30%  { transform: rotate(-8deg); }
+      45%  { transform: rotate(6deg); }
+      60%  { transform: rotate(-4deg); }
+      75%  { transform: rotate(2deg); }
+      90%  { transform: rotate(-1deg); }
+      100% { transform: rotate(0deg); }
     }
 
     .flap {
