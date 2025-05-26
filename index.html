@@ -70,6 +70,24 @@
       margin-top: 15px;
       font-size: 16px;
       color: #a69281;
+      font-weight: bold;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .loading-circle {
+      width: 28px;
+      height: 28px;
+      border: 4px solid #a69281;
+      border-top: 4px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .error-message {
@@ -110,109 +128,131 @@
 </head>
 <body>
 
-<div class="login-container">
-  <h2>Welcome mi niña 🧸</h2>
+  <div class="login-container">
+    <h2>Welcome mi niña 🧸</h2>
 
-  <div class="label">User:</div>
-  <div class="drop-zone" id="usernameDrop" ondrop="drop(event, 'username')" ondragover="allowDrop(event)"></div>
+    <div class="label">User:</div>
+    <div class="drop-zone" id="usernameDrop" ondrop="drop(event, 'username')" ondragover="allowDrop(event)"></div>
 
-  <div class="label">Password:</div>
-  <div class="drop-zone" id="passwordDrop" ondrop="drop(event, 'password')" ondragover="allowDrop(event)"></div>
+    <div class="label">Password:</div>
+    <div class="drop-zone" id="passwordDrop" ondrop="drop(event, 'password')" ondragover="allowDrop(event)"></div>
 
-  <button class="login-button" onclick="checkLogin()">Login</button>
+    <button class="login-button" onclick="checkLogin()">Login</button>
 
-  <div class="loading" id="loading">LOADING... ☁️</div>
-  <div class="error-message" id="error">Wrong user or password 💔</div>
-</div>
+    <div class="loading" id="loading">
+      <div>LOADING<span id="dots">...</span> ☁️</div>
+      <div class="loading-circle"></div>
+    </div>
 
-<script>
-  const usernameTarget = "myprincess";
-  const passwordTarget = "iloveyou";
-  const letters = (usernameTarget + passwordTarget).split('');
-  let usernameInput = "";
-  let passwordInput = "";
+    <div class="error-message" id="error">Wrong user or password 💔</div>
+  </div>
 
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
+  <script>
+    const usernameTarget = "myprincess";
+    const passwordTarget = "iloveyou";
+    const letters = (usernameTarget + passwordTarget).split('');
+    let usernameInput = "";
+    let passwordInput = "";
 
-  const shuffledLetters = shuffle([...letters]);
-
-  const loginBox = document.querySelector('.login-container');
-  const loginBoxRect = loginBox.getBoundingClientRect();
-
-  shuffledLetters.forEach((letter, i) => {
-    const cube = document.createElement("div");
-    cube.className = "letter";
-    cube.innerText = letter.toUpperCase();
-    cube.draggable = true;
-    cube.id = "letter" + i;
-    cube.setAttribute("data-letter", letter);
-    cube.ondragstart = (e) => drag(e);
-
-    let top, left;
-    do {
-      top = Math.random() * (window.innerHeight - 60);
-      left = Math.random() * (window.innerWidth - 60);
-    } while (
-      top > loginBoxRect.top - 80 &&
-      top < loginBoxRect.bottom + 80 &&
-      left > loginBoxRect.left - 80 &&
-      left < loginBoxRect.right + 80
-    );
-
-    cube.style.top = top + "px";
-    cube.style.left = left + "px";
-    document.body.appendChild(cube);
-  });
-
-  function allowDrop(ev) {
-    ev.preventDefault();
-  }
-
-  function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-  }
-
-  function drop(ev, field) {
-    ev.preventDefault();
-    const data = ev.dataTransfer.getData("text");
-    const el = document.getElementById(data);
-    const letter = el.getAttribute("data-letter");
-
-    if (field === "username" && usernameInput.length < usernameTarget.length) {
-      usernameInput += letter;
-      document.getElementById("usernameDrop").textContent = usernameInput;
-    } else if (field === "password" && passwordInput.length < passwordTarget.length) {
-      passwordInput += letter;
-      document.getElementById("passwordDrop").textContent = "*".repeat(passwordInput.length);
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
 
-    el.classList.add("fade-out");
-    setTimeout(() => {
-      el.remove();
-    }, 300);
-  }
+    const shuffledLetters = shuffle([...letters]);
 
-  function checkLogin() {
-    const errorBox = document.getElementById("error");
-    const loading = document.getElementById("loading");
-    errorBox.style.display = "none";
+    const loginBox = document.querySelector('.login-container');
+    const loginBoxRect = loginBox.getBoundingClientRect();
 
-    if (usernameInput === usernameTarget && passwordInput === passwordTarget) {
-      loading.style.display = "block";
+    shuffledLetters.forEach((letter, i) => {
+      const cube = document.createElement("div");
+      cube.className = "letter";
+      cube.innerText = letter.toUpperCase();
+      cube.draggable = true;
+      cube.id = "letter" + i;
+      cube.setAttribute("data-letter", letter);
+      cube.ondragstart = (e) => drag(e);
+
+      let top, left;
+      do {
+        top = Math.random() * (window.innerHeight - 60);
+        left = Math.random() * (window.innerWidth - 60);
+      } while (
+        top > loginBoxRect.top - 80 &&
+        top < loginBoxRect.bottom + 80 &&
+        left > loginBoxRect.left - 80 &&
+        left < loginBoxRect.right + 80
+      );
+
+      cube.style.top = top + "px";
+      cube.style.left = left + "px";
+      document.body.appendChild(cube);
+    });
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev, field) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      const el = document.getElementById(data);
+      const letter = el.getAttribute("data-letter");
+
+      if (field === "username" && usernameInput.length < usernameTarget.length) {
+        usernameInput += letter;
+        document.getElementById("usernameDrop").textContent = usernameInput;
+      } else if (field === "password" && passwordInput.length < passwordTarget.length) {
+        passwordInput += letter;
+        document.getElementById("passwordDrop").textContent = "*".repeat(passwordInput.length);
+      }
+
+      el.classList.add("fade-out");
       setTimeout(() => {
-        window.location.href = "reseñas.html";
-      }, 3000);
-    } else {
-      errorBox.style.display = "block";
+        el.remove();
+      }, 300);
     }
-  }
-</script>
+
+    let dotInterval;
+
+    function startDotAnimation() {
+      const dots = document.getElementById("dots");
+      let count = 0;
+      dotInterval = setInterval(() => {
+        count = (count + 1) % 4;
+        dots.textContent = '.'.repeat(count);
+      }, 500);
+    }
+
+    function stopDotAnimation() {
+      clearInterval(dotInterval);
+    }
+
+    function checkLogin() {
+      const errorBox = document.getElementById("error");
+      const loading = document.getElementById("loading");
+      errorBox.style.display = "none";
+
+      if (usernameInput === usernameTarget && passwordInput === passwordTarget) {
+        loading.style.display = "flex";
+        startDotAnimation();
+
+        setTimeout(() => {
+          stopDotAnimation();
+          window.location.href = "reseñas.html";
+        }, 3000);
+      } else {
+        errorBox.style.display = "block";
+      }
+    }
+  </script>
 
 </body>
 </html>
