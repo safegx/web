@@ -95,9 +95,24 @@
     .star {
       width: 50px;
       height: 50px;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, filter 0.3s ease;
       user-select: none;
       filter: none;
+      transform-origin: center center;
+    }
+
+    /* Zoom más grande al pasar el ratón */
+    .star:hover {
+      transform: scale(1.5);
+      filter: drop-shadow(0 0 8px gold);
+      z-index: 10;
+    }
+
+    /* Zoom más pequeño pero notable en estrellas seleccionadas */
+    .star.selected {
+      transform: scale(1.25);
+      filter: drop-shadow(0 0 6px gold);
+      z-index: 5;
     }
 
     .star.zoom {
@@ -174,7 +189,7 @@
 
     @keyframes zoomInOut {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.3); }
+      50% { transform: scale(1.5); }
     }
   </style>
 </head>
@@ -196,7 +211,6 @@
     <div id="total">0 reviews</div>
 
     <div class="stars" id="stars">
-      <!-- Aquí ya usamos el gif para que estén animadas desde el principio -->
       <img class="star" data-value="1" src="star.gif" alt="Star 1" />
       <img class="star" data-value="2" src="star.gif" alt="Star 2" />
       <img class="star" data-value="3" src="star.gif" alt="Star 3" />
@@ -247,15 +261,23 @@
           star.classList.remove('zoom');
         }, 500);
       });
+
+      star.addEventListener('mouseenter', () => {
+        // No modificamos aquí, solo CSS :hover controla el zoom
+      });
+
+      star.addEventListener('mouseleave', () => {
+        // Tampoco aquí
+      });
     });
 
     function highlightStars(rating) {
       stars.forEach(star => {
         const val = Number(star.getAttribute('data-value'));
         if (val <= rating) {
-          star.style.filter = "drop-shadow(0 0 4px gold)";
+          star.classList.add('selected');
         } else {
-          star.style.filter = "none";
+          star.classList.remove('selected');
         }
       });
     }
