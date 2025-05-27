@@ -261,14 +261,6 @@
           star.classList.remove('zoom');
         }, 500);
       });
-
-      star.addEventListener('mouseenter', () => {
-        // No modificamos aquí, solo CSS :hover controla el zoom
-      });
-
-      star.addEventListener('mouseleave', () => {
-        // Tampoco aquí
-      });
     });
 
     function highlightStars(rating) {
@@ -309,6 +301,11 @@
           comment,
           timestamp: serverTimestamp()
         });
+
+        // Reproducir sonido al enviar la calificación
+        const sound = new Audio('star.mp3');
+        sound.play();
+
         commentInput.value = '';
         selectedRating = 0;
         highlightStars(0);
