@@ -25,10 +25,11 @@
       display: flex;
       justify-content: center;
       gap: 2rem;
-      padding: 1rem;
+      padding: 1rem 1rem;
       z-index: 1000;
       font-weight: 600;
       font-size: 1.1rem;
+      letter-spacing: 0.03em;
     }
 
     nav a {
@@ -36,11 +37,12 @@
       text-decoration: none;
       padding: 8px 14px;
       border-radius: 10px;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     nav a:hover {
       background-color: #e0d2c0;
+      color: #4a3a2c;
     }
 
     nav a.active {
@@ -285,13 +287,13 @@
           comment,
           timestamp: serverTimestamp()
         });
-        showMessage("Thank you for your review!", "success");
-        commentInput.value = "";
+        commentInput.value = '';
         selectedRating = 0;
         highlightStars(0);
+        showMessage("Thanks for your review!", "success");
         loadReviews();
       } catch (error) {
-        showMessage("Failed to send review. Try again later.", "error");
+        showMessage("Failed to send review. Try again.", "error");
         console.error(error);
       }
     });
@@ -300,34 +302,26 @@
       const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
       const querySnapshot = await getDocs(q);
 
-      reviewLog.innerHTML = "<h2>Comments 💬</h2>";
-
-      let sum = 0;
+      let total = 0;
       let count = 0;
+      let html = '<h2>Comments 💬</h2>';
 
       querySnapshot.forEach(doc => {
         const data = doc.data();
-        count++;
-        sum += data.rating;
-
-        const item = document.createElement('div');
-        item.classList.add('review-item');
-
-        const starsLine = document.createElement('div');
-        starsLine.classList.add('review-stars');
-        starsLine.textContent = "★".repeat(data.rating) + "☆".repeat(5 - data.rating);
-
-        const commentLine = document.createElement('p');
-        commentLine.textContent = data.comment;
-
-        item.appendChild(starsLine);
-        item.appendChild(commentLine);
-        reviewLog.appendChild(item);
+        if (data.rating && data.comment) {
+          total += data.rating;
+          count++;
+          const starsDisplay = '★'.repeat(data.rating) + '☆'.repeat(5 - data.rating);
+          html += `<div class="review-item">
+                    <div class="review-stars">${starsDisplay}</div>
+                    <div>${data.comment}</div>
+                  </div>`;
+        }
       });
 
-      const avg = count ? (sum / count).toFixed(1) : "0.0";
-      averageDisplay.textContent = avg;
+      averageDisplay.textContent = count ? (total / count).toFixed(1) : '0.0';
       totalDisplay.textContent = `${count} review${count !== 1 ? 's' : ''}`;
+      reviewLog.innerHTML = html;
     }
 
     loadReviews();
