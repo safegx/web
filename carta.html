@@ -66,6 +66,10 @@
       width: 100%;
     }
 
+    .zoom-wrapper {
+      zoom: 1.2;
+    }
+
     .envelope {
       width: 280px;
       height: 190px;
@@ -224,15 +228,17 @@
   <div class="spacer"></div>
 
   <div class="container">
-    <div class="envelope" id="envelope" title="Haz clic para abrir la carta">
-      <div class="flap"></div>
-      <div class="seal">❤️</div>
-      <div class="letter">
-        <p>Mi niña ,</p>
-        <p>I don’t know how to begin this without my hands trembling a little. 
-          Sometimes, loving you feels too big for words too real, too beautiful, too overwhelming. 
-          But I’ll try, because you deserve to hear everything my heart has been carrying quietly.</p>
-        <p>Always yours,<br/>Samuel💖</p>
+    <div class="zoom-wrapper">
+      <div class="envelope" id="envelope" title="Haz clic para abrir la carta">
+        <div class="flap"></div>
+        <div class="seal">❤️</div>
+        <div class="letter">
+          <p>Mi niña ,</p>
+          <p>I don’t know how to begin this without my hands trembling a little. 
+            Sometimes, loving you feels too big for words too real, too beautiful, too overwhelming. 
+            But I’ll try, because you deserve to hear everything my heart has been carrying quietly.</p>
+          <p>Always yours,<br/>Samuel💖</p>
+        </div>
       </div>
     </div>
   </div>
@@ -253,6 +259,7 @@
     </div>
   </div>
 
+  <!-- SONIDO DE CARTA ABRIENDOSE -->
   <audio id="openSound" src="open-letter.mp3" preload="auto"></audio>
 
   <script>
